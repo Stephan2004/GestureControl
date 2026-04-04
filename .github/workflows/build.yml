@@ -22,21 +22,21 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Install Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.0'
+
       - name: Download MediaPipe model
         run: |
           mkdir -p GestureControl/app/src/main/assets
           curl -L "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task" \
             -o GestureControl/app/src/main/assets/hand_landmarker.task
 
-      - name: Make gradlew executable
-        run: |
-          cd GestureControl
-          chmod +x gradlew
-
       - name: Build Debug APK
         run: |
           cd GestureControl
-          ./gradlew assembleDebug --no-daemon
+          gradle assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
